@@ -20,9 +20,13 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Comprobación rápida de que el servidor y la base de datos responden
-app.get('/api/salud', (req, res) => {
-  const { n } = db.prepare('SELECT COUNT(*) AS n FROM usuarios').get();
-  res.json({ mensaje: 'Servidor funcionando', usuarios: n });
+app.get('/api/salud', async (req, res, next) => {
+  try {
+    const [[{ n }]] = await db.query('SELECT COUNT(*) AS n FROM usuarios');
+    res.json({ mensaje: 'Servidor funcionando', usuarios: n });
+  } catch (error) {
+    next(error);
+  }
 });
 
 // Carga automática de rutas
@@ -56,6 +60,14 @@ app.use((error, req, res, next) => {
   res.status(500).json({ error: 'Error interno del servidor' });
 });
 
-app.listen(PUERTO, () => {
-  console.log(`Servidor en http://localhost:${PUERTO}`);
-});
+// Primero se asegura de que la base de datos y las tablas existan, luego se arranca
+db.iniciar()
+  .then(() => {
+    app.listen(PUERTO, () => {
+      console.log(`Servidor en http://localhost:${PUERTO}`);
+    });
+  })
+  .catch((error) => {
+    console.error('No se pudo iniciar la base de datos:', error.message);
+    process.exit(1);
+  });

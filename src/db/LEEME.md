@@ -1,28 +1,35 @@
-# Base de datos y servidor (rama `feature/db`)
+# Base de datos y servidor (rama `feature/db-mesas`)
 
-Base de datos SQLite con `node:sqlite` (requiere Node.js 22.13 o superior).
-El archivo se crea solo en `data/restaurante.db` (no se sube a git).
+Base de datos **MariaDB** (paquete `mysql2`). Hay que tener MariaDB encendido en el computador
+(por ejemplo con XAMPP: botón Start en MySQL). La base `restaurante` y sus tablas se crean solas.
 
 ## Cómo usarla
 
 ```bash
 npm install
-npm run seed    # crea tablas y datos de ejemplo
-npm start       # http://localhost:3000  ->  /api/salud
+npm install mysql2          # nueva dependencia (si package.json aún no la trae)
+cp .env.example .env        # y revisar DB_USER / DB_PASSWORD (en XAMPP: root y vacío)
+npm run seed                # crea la base, las tablas y datos de ejemplo
+npm start                   # http://localhost:3000  ->  /api/salud
 ```
 
 Usuarios de ejemplo: `admin@restaurante.com / admin123` y `cliente@restaurante.com / cliente123`.
 
 ## Usar la conexión
 
+Todo es **asíncrono**: se usa `await` y la función debe ser `async`. Los `?` evitan inyección SQL.
+
 ```js
 const db = require('../db/conexion');
 
-const usuario = db.prepare('SELECT * FROM usuarios WHERE correo = ?').get(correo);
-const info = db.prepare(
-  'INSERT INTO reservas (usuario_id, fecha, hora, personas) VALUES (?, ?, ?, ?)'
-).run(usuarioId, '2026-10-15', '20:00', 4);
-console.log(info.lastInsertRowid);
+const [filas] = await db.query('SELECT * FROM usuarios WHERE correo = ?', [correo]);
+const usuario = filas[0];            // undefined si no existe
+
+const [resultado] = await db.query(
+  'INSERT INTO reservas (usuario_id, fecha, hora, personas) VALUES (?, ?, ?, ?)',
+  [usuarioId, '2026-10-15', '20:00', 4]
+);
+console.log(resultado.insertId);
 ```
 
 ## Contraseñas
@@ -47,7 +54,12 @@ const { Router } = require('express');
 const db = require('../db/conexion');
 
 const router = Router();
-router.get('/', (req, res) => res.json(db.prepare('SELECT * FROM reservas').all()));
+router.get('/', async (req, res, next) => {
+  try {
+    const [reservas] = await db.query('SELECT * FROM reservas');
+    res.json(reservas);
+  } catch (error) { next(error); }
+});
 
 module.exports = router;
 ```
@@ -56,11 +68,12 @@ module.exports = router;
 
 - **usuarios**: `id`, `nombre`, `correo` (único), `contrasena` (hash bcryptjs), `rol` (`cliente` | `admin`)
 - **mesas**: `id`, `numero` (único), `capacidad`, `ubicacion` (`interior` | `terraza`), `estado` (`libre` | `reservada` | `ocupada`, por defecto `libre`)
-- **reservas**: `id`, `usuario_id`, `mesa_id` (opcional), `fecha` (`YYYY-MM-DD`), `hora` (`HH:MM`), `personas`, `estado` (`activa` | `cancelada`)
+- **reservas**: `id`, `usuario_id`, `mesa_id` (opcional), `fecha` (`YYYY-MM-DD`), `hora` (se guarda `HH:MM`, se lee `HH:MM:SS`), `personas`, `estado` (`activa` | `confirmada` | `cancelada`)
 
-Una mesa no puede tener dos reservas **activas** en la misma fecha y hora (índice único
-`idx_reservas_sin_conflicto`). Si pasa, SQLite lanza `UNIQUE constraint failed`; la ruta de
-reservas debe capturarlo y responder "mesa ocupada".
+Una mesa no puede tener dos reservas **activas o confirmadas** en la misma fecha y hora (índice único
+`idx_reservas_sin_conflicto`; las canceladas no bloquean). Si pasa, MariaDB lanza un error con
+`error.code === 'ER_DUP_ENTRY'`; la ruta de reservas debe capturarlo y responder "mesa ocupada".
+Ojo: el índice solo detecta la misma hora exacta; solapes de horario se validan en código.
 
 ## Catálogo de mesas (API)
 
@@ -71,10 +84,11 @@ reservas debe capturarlo y responder "mesa ocupada".
 Para cambiar el estado de una mesa desde el backend de reservas:
 
 ```js
-db.prepare('UPDATE mesas SET estado = ? WHERE id = ?').run('reservada', mesaId);
+await db.query('UPDATE mesas SET estado = ? WHERE id = ?', ['reservada', mesaId]);
 ```
 
-## Si ya tenías una base de datos anterior
+## Si cambias la base de datos
 
-`conexion.js` agrega solo las columnas nuevas de `mesas` si faltan, y `npm run seed`
-completa ubicación de las mesas existentes. No hace falta borrar `data/restaurante.db`.
+Agrega tablas o columnas **al final** de `src/db/schema.sql` (con `CREATE TABLE IF NOT EXISTS`).
+Las tablas que ya existen en tu MariaDB local no se modifican solas: si cambias una tabla existente,
+bórrala en tu base local (`DROP DATABASE restaurante;`) y corre `npm run seed` otra vez.
