@@ -55,9 +55,26 @@ module.exports = router;
 ## Tablas
 
 - **usuarios**: `id`, `nombre`, `correo` (único), `contrasena` (hash bcryptjs), `rol` (`cliente` | `admin`)
-- **mesas**: `id`, `numero` (único), `capacidad`
+- **mesas**: `id`, `numero` (único), `capacidad`, `ubicacion` (`interior` | `terraza`), `estado` (`libre` | `reservada` | `ocupada`, por defecto `libre`)
 - **reservas**: `id`, `usuario_id`, `mesa_id` (opcional), `fecha` (`YYYY-MM-DD`), `hora` (`HH:MM`), `personas`, `estado` (`activa` | `cancelada`)
 
 Una mesa no puede tener dos reservas **activas** en la misma fecha y hora (índice único
 `idx_reservas_sin_conflicto`). Si pasa, SQLite lanza `UNIQUE constraint failed`; la ruta de
 reservas debe capturarlo y responder "mesa ocupada".
+
+## Catálogo de mesas (API)
+
+- `GET /api/mesas` → lista de mesas ordenada por número.
+- Filtros opcionales: `?ubicacion=terraza`, `?estado=libre`, `?capacidad_minima=4` (se pueden combinar).
+- `GET /api/mesas/:id` → una mesa (404 si no existe).
+
+Para cambiar el estado de una mesa desde el backend de reservas:
+
+```js
+db.prepare('UPDATE mesas SET estado = ? WHERE id = ?').run('reservada', mesaId);
+```
+
+## Si ya tenías una base de datos anterior
+
+`conexion.js` agrega solo las columnas nuevas de `mesas` si faltan, y `npm run seed`
+completa ubicación de las mesas existentes. No hace falta borrar `data/restaurante.db`.

@@ -14,7 +14,9 @@ CREATE TABLE IF NOT EXISTS usuarios (
 CREATE TABLE IF NOT EXISTS mesas (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   numero      INTEGER NOT NULL UNIQUE,
-  capacidad   INTEGER NOT NULL CHECK (capacidad > 0)
+  capacidad   INTEGER NOT NULL CHECK (capacidad > 0),
+  ubicacion   TEXT NOT NULL DEFAULT 'interior' CHECK (ubicacion IN ('interior', 'terraza')),
+  estado      TEXT NOT NULL DEFAULT 'libre' CHECK (estado IN ('libre', 'reservada', 'ocupada'))
 );
 
 CREATE TABLE IF NOT EXISTS reservas (
