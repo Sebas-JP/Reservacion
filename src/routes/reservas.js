@@ -6,6 +6,8 @@ const db = require('../db/conexion');
 
 const router = Router();
 
+const DURACION_MIN = 120; // cada reserva ocupa la mesa 2 horas
+
 // Genera un código como RES-K7P2M (sin letras confusas como O, 0, I, 1)
 function generarCodigo() {
   const letras = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
@@ -16,36 +18,90 @@ function generarCodigo() {
   return codigo;
 }
 
+// ¿La mesa ya tiene una reserva vigente que se cruce con esta hora?
+// Solo cuentan las que no están canceladas.
+async function hayConflicto(conn, mesaId, fecha, hora) {
+  const [filas] = await conn.query(
+    `SELECT id FROM reservas
+     WHERE mesa_id = ? AND fecha = ? AND estado <> 'cancelada'
+       AND ABS(TIME_TO_SEC(hora) - TIME_TO_SEC(?)) < ?`,
+    [mesaId, fecha, hora, DURACION_MIN * 60]
+  );
+  return filas.length > 0;
+}
+
 router.post('/', async (req, res, next) => {
+  const conn = await db.getConnection();
   try {
     // TEMPORAL: usuario_id viene en el body hasta que exista el login (Persona 2).
     // Después se reemplaza por req.usuario.id
     const { usuario_id, mesa_id, fecha, hora, personas, preferencia } = req.body ?? {};
 
-    if (!usuario_id || !mesa_id || !fecha || !hora || !personas) {
-      return res.status(400).json({ error: 'Faltan datos: usuario_id, mesa_id, fecha, hora y personas' });
+    if (!usuario_id || !fecha || !hora || !personas) {
+      return res.status(400).json({ error: 'Faltan datos: usuario_id, fecha, hora y personas' });
+    }
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha) || !/^\d{2}:\d{2}$/.test(hora)) {
+      return res.status(400).json({ error: 'Formato inválido: fecha AAAA-MM-DD y hora HH:MM' });
+    }
+    if (!Number.isInteger(personas) || personas < 1) {
+      return res.status(400).json({ error: 'personas debe ser un número entero mayor a 0' });
+    }
+    if (new Date(`${fecha}T${hora}:00`) < new Date()) {
+      return res.status(400).json({ error: 'No se puede reservar en el pasado' });
     }
 
-    // La mesa debe existir y tener capacidad para el grupo
-    const [mesas] = await db.query('SELECT id, capacidad FROM mesas WHERE id = ?', [mesa_id]);
-    if (!mesas.length) {
-      return res.status(404).json({ error: 'La mesa no existe' });
-    }
-    if (mesas[0].capacidad < personas) {
-      return res.status(400).json({ error: 'La mesa no tiene capacidad para tantas personas' });
+    // La transacción y el bloqueo (FOR UPDATE) evitan que dos clientes
+    // reserven la misma mesa al mismo tiempo.
+    await conn.beginTransaction();
+
+    let mesa = null;
+    if (mesa_id) {
+      // El cliente eligió una mesa
+      const [m] = await conn.query('SELECT id, numero, capacidad FROM mesas WHERE id = ? FOR UPDATE', [mesa_id]);
+      if (!m.length) {
+        await conn.rollback();
+        return res.status(404).json({ error: 'La mesa no existe' });
+      }
+      if (m[0].capacidad < personas) {
+        await conn.rollback();
+        return res.status(400).json({ error: 'La mesa no tiene capacidad para tantas personas' });
+      }
+      if (await hayConflicto(conn, m[0].id, fecha, hora)) {
+        await conn.rollback();
+        return res.status(409).json({ error: 'Esa mesa ya está reservada en ese horario' });
+      }
+      mesa = m[0];
+    } else {
+      // Asignación automática: la mesa más pequeña que alcance y esté libre
+      const [candidatas] = await conn.query(
+        'SELECT id, numero, capacidad FROM mesas WHERE capacidad >= ? ORDER BY capacidad, numero FOR UPDATE',
+        [personas]
+      );
+      for (const c of candidatas) {
+        if (!(await hayConflicto(conn, c.id, fecha, hora))) {
+          mesa = c;
+          break;
+        }
+      }
+      if (!mesa) {
+        await conn.rollback();
+        return res.status(409).json({ error: 'No hay mesas disponibles en ese horario' });
+      }
     }
 
     const codigo = generarCodigo();
-    const [resultado] = await db.query(
+    const [resultado] = await conn.query(
       `INSERT INTO reservas (codigo, usuario_id, mesa_id, fecha, hora, personas, preferencia)
        VALUES (?, ?, ?, ?, ?, ?, ?)`,
-      [codigo, usuario_id, mesa_id, fecha, hora, personas, preferencia || null]
+      [codigo, usuario_id, mesa.id, fecha, hora, personas, preferencia || null]
     );
+    await conn.commit();
 
     res.status(201).json({
       id: resultado.insertId,
       codigo,
-      mesa_id,
+      mesa_id: mesa.id,
+      mesa: mesa.numero,
       fecha,
       hora,
       personas,
@@ -53,11 +109,14 @@ router.post('/', async (req, res, next) => {
       estado: 'activa',
     });
   } catch (error) {
-    // El índice único de la Persona 1 detecta la misma mesa, fecha y hora
+    await conn.rollback();
+    // Red de seguridad: el índice único de la Persona 1
     if (error.code === 'ER_DUP_ENTRY') {
       return res.status(409).json({ error: 'Esa mesa ya está reservada en ese horario' });
     }
     next(error);
+  } finally {
+    conn.release();
   }
 });
 
