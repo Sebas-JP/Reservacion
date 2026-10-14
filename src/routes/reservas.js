@@ -120,4 +120,49 @@ router.post('/', async (req, res, next) => {
   }
 });
 
+// Mis reservas  ->  GET /api/reservas/mias?usuario_id=1
+// TEMPORAL: usuario_id viene en la URL hasta que exista el login (Persona 2).
+router.get('/mias', async (req, res, next) => {
+  try {
+    const usuarioId = Number(req.query.usuario_id);
+    if (!Number.isInteger(usuarioId) || usuarioId < 1) {
+      return res.status(400).json({ error: 'Falta usuario_id' });
+    }
+    const [reservas] = await db.query(
+      `SELECT r.id, r.codigo, r.mesa_id, m.numero AS mesa, m.ubicacion,
+              r.fecha, r.hora, r.personas, r.preferencia, r.estado
+       FROM reservas r
+       LEFT JOIN mesas m ON m.id = r.mesa_id
+       WHERE r.usuario_id = ?
+       ORDER BY r.fecha DESC, r.hora DESC`,
+      [usuarioId]
+    );
+    res.json(reservas);
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Cancelar una reserva  ->  DELETE /api/reservas/:id?usuario_id=1
+// No se borra de la base: solo cambia su estado a 'cancelada'.
+router.delete('/:id', async (req, res, next) => {
+  try {
+    const usuarioId = Number(req.query.usuario_id);
+    if (!Number.isInteger(usuarioId) || usuarioId < 1) {
+      return res.status(400).json({ error: 'Falta usuario_id' });
+    }
+    const [resultado] = await db.query(
+      `UPDATE reservas SET estado = 'cancelada'
+       WHERE id = ? AND usuario_id = ? AND estado <> 'cancelada'`,
+      [Number(req.params.id), usuarioId]
+    );
+    if (resultado.affectedRows === 0) {
+      return res.status(404).json({ error: 'Reserva no encontrada o ya cancelada' });
+    }
+    res.json({ mensaje: 'Reserva cancelada' });
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;
