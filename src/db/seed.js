@@ -1,5 +1,5 @@
 // Datos de ejemplo. Ejecutar con: npm run seed
-// Es seguro correrlo varias veces (no duplica registros).
+// Crea la base y las tablas si faltan. Es seguro correrlo varias veces (no duplica registros).
 
 const db = require('./conexion');
 const bcrypt = require('bcryptjs');
@@ -9,13 +9,6 @@ const usuarios = [
   { nombre: 'Cliente Demo', correo: 'cliente@restaurante.com', contrasena: 'cliente123', rol: 'cliente' },
 ];
 
-const insertarUsuario = db.prepare(
-  'INSERT OR IGNORE INTO usuarios (nombre, correo, contrasena, rol) VALUES (?, ?, ?, ?)'
-);
-for (const u of usuarios) {
-  insertarUsuario.run(u.nombre, u.correo, bcrypt.hashSync(u.contrasena, 10), u.rol);
-}
-
 // [numero, capacidad, ubicacion]. Si la mesa ya existe se actualizan capacidad y
 // ubicacion, pero NO su estado actual.
 const mesas = [
@@ -23,15 +16,38 @@ const mesas = [
   [4, 4, 'interior'], [5, 6, 'interior'], [6, 8, 'interior'],
   [7, 2, 'terraza'],  [8, 4, 'terraza'],  [9, 4, 'terraza'], [10, 6, 'terraza'],
 ];
-// Primero intenta actualizar; solo inserta si la mesa no existe (así los id quedan consecutivos).
-const actualizarMesa = db.prepare('UPDATE mesas SET capacidad = ?, ubicacion = ? WHERE numero = ?');
-const insertarMesa = db.prepare('INSERT INTO mesas (numero, capacidad, ubicacion) VALUES (?, ?, ?)');
-for (const [numero, capacidad, ubicacion] of mesas) {
-  const { changes } = actualizarMesa.run(capacidad, ubicacion, numero);
-  if (changes === 0) insertarMesa.run(numero, capacidad, ubicacion);
+
+async function total(tabla) {
+  const [[{ n }]] = await db.query(`SELECT COUNT(*) AS n FROM ${tabla}`);
+  return n;
 }
 
-const total = (tabla) => db.prepare(`SELECT COUNT(*) AS n FROM ${tabla}`).get().n;
-console.log(`Seed listo -> usuarios: ${total('usuarios')}, mesas: ${total('mesas')}, reservas: ${total('reservas')}`);
-console.log('Admin:   admin@restaurante.com / admin123');
-console.log('Cliente: cliente@restaurante.com / cliente123');
+async function main() {
+  await db.iniciar();
+
+  for (const u of usuarios) {
+    await db.query(
+      'INSERT IGNORE INTO usuarios (nombre, correo, contrasena, rol) VALUES (?, ?, ?, ?)',
+      [u.nombre, u.correo, bcrypt.hashSync(u.contrasena, 10), u.rol]
+    );
+  }
+
+  for (const [numero, capacidad, ubicacion] of mesas) {
+    const [r] = await db.query('SELECT id FROM mesas WHERE numero = ?', [numero]);
+    if (r.length) {
+      await db.query('UPDATE mesas SET capacidad = ?, ubicacion = ? WHERE numero = ?', [capacidad, ubicacion, numero]);
+    } else {
+      await db.query('INSERT INTO mesas (numero, capacidad, ubicacion) VALUES (?, ?, ?)', [numero, capacidad, ubicacion]);
+    }
+  }
+
+  console.log(`Seed listo -> usuarios: ${await total('usuarios')}, mesas: ${await total('mesas')}, reservas: ${await total('reservas')}`);
+  console.log('Admin:   admin@restaurante.com / admin123');
+  console.log('Cliente: cliente@restaurante.com / cliente123');
+  await db.end();
+}
+
+main().catch((error) => {
+  console.error('Error en el seed:', error.message);
+  process.exit(1);
+});

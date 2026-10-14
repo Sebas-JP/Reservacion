@@ -1,40 +1,45 @@
 -- Script de la base de datos: Plataforma de Reservas de Restaurante
--- Motor: SQLite (node:sqlite)
-
-PRAGMA foreign_keys = ON;
+-- Motor: MariaDB. La base "restaurante" la crea conexion.js (iniciar) si no existe.
+-- Si agregas tablas o columnas nuevas, escríbelas AL FINAL de este archivo.
 
 CREATE TABLE IF NOT EXISTS usuarios (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  nombre      TEXT NOT NULL,
-  correo      TEXT NOT NULL UNIQUE,
-  contrasena  TEXT NOT NULL,                       -- hash de bcryptjs, nunca texto plano
-  rol         TEXT NOT NULL DEFAULT 'cliente' CHECK (rol IN ('cliente', 'admin'))
-);
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  nombre      VARCHAR(100) NOT NULL,
+  correo      VARCHAR(150) NOT NULL UNIQUE,
+  contrasena  VARCHAR(255) NOT NULL,                -- hash de bcryptjs, nunca texto plano
+  rol         VARCHAR(10)  NOT NULL DEFAULT 'cliente',
+  CONSTRAINT chk_usuarios_rol CHECK (rol IN ('cliente', 'admin'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS mesas (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  numero      INTEGER NOT NULL UNIQUE,
-  capacidad   INTEGER NOT NULL CHECK (capacidad > 0),
-  ubicacion   TEXT NOT NULL DEFAULT 'interior' CHECK (ubicacion IN ('interior', 'terraza')),
-  estado      TEXT NOT NULL DEFAULT 'libre' CHECK (estado IN ('libre', 'reservada', 'ocupada'))
-);
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  numero      INT NOT NULL UNIQUE,
+  capacidad   INT NOT NULL,
+  ubicacion   VARCHAR(10) NOT NULL DEFAULT 'interior',
+  estado      VARCHAR(10) NOT NULL DEFAULT 'libre',
+  CONSTRAINT chk_mesas_capacidad CHECK (capacidad > 0),
+  CONSTRAINT chk_mesas_ubicacion CHECK (ubicacion IN ('interior', 'terraza')),
+  CONSTRAINT chk_mesas_estado    CHECK (estado IN ('libre', 'reservada', 'ocupada'))
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS reservas (
-  id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  usuario_id  INTEGER NOT NULL,
-  mesa_id     INTEGER,                              -- opcional: se puede asignar una mesa
-  fecha       TEXT NOT NULL,                        -- formato YYYY-MM-DD
-  hora        TEXT NOT NULL,                        -- formato HH:MM
-  personas    INTEGER NOT NULL CHECK (personas > 0),
-  estado      TEXT NOT NULL DEFAULT 'activa' CHECK (estado IN ('activa', 'cancelada')),
-  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
-  FOREIGN KEY (mesa_id)    REFERENCES mesas(id)    ON DELETE SET NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_reservas_fecha_hora ON reservas (fecha, hora);
-CREATE INDEX IF NOT EXISTS idx_reservas_usuario    ON reservas (usuario_id);
-
--- Evita que una misma mesa tenga dos reservas activas en la misma fecha y hora
-CREATE UNIQUE INDEX IF NOT EXISTS idx_reservas_sin_conflicto
-  ON reservas (mesa_id, fecha, hora)
-  WHERE estado = 'activa' AND mesa_id IS NOT NULL;
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  usuario_id  INT NOT NULL,
+  mesa_id     INT NULL,                             -- opcional: se puede asignar una mesa
+  fecha       DATE NOT NULL,                        -- se lee como 'YYYY-MM-DD'
+  hora        TIME NOT NULL,                        -- se escribe 'HH:MM', se lee 'HH:MM:SS'
+  personas    INT NOT NULL,
+  estado      VARCHAR(10) NOT NULL DEFAULT 'activa',
+  -- Truco para evitar choques: vale 1 mientras la reserva está activa o confirmada y NULL
+  -- si está cancelada. MariaDB permite varios NULL en un índice único, así que las
+  -- canceladas no bloquean la mesa.
+  bloquea_mesa TINYINT AS (CASE WHEN estado IN ('activa', 'confirmada') THEN 1 ELSE NULL END) VIRTUAL,
+  CONSTRAINT chk_reservas_personas CHECK (personas > 0),
+  CONSTRAINT chk_reservas_estado   CHECK (estado IN ('activa', 'confirmada', 'cancelada')),
+  CONSTRAINT fk_reservas_usuario FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+  CONSTRAINT fk_reservas_mesa    FOREIGN KEY (mesa_id)    REFERENCES mesas(id)    ON DELETE SET NULL,
+  INDEX idx_reservas_fecha_hora (fecha, hora),
+  INDEX idx_reservas_usuario (usuario_id),
+  -- Una misma mesa no puede tener dos reservas vigentes en la misma fecha y hora
+  UNIQUE KEY idx_reservas_sin_conflicto (mesa_id, fecha, hora, bloquea_mesa)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
