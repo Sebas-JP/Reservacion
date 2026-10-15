@@ -3,6 +3,7 @@
 
 const { Router } = require('express');
 const db = require('../db/conexion');
+const { verificarToken } = require('../middleware/auth');
 
 const router = Router();
 
@@ -30,15 +31,14 @@ async function hayConflicto(conn, mesaId, fecha, hora) {
   return filas.length > 0;
 }
 
-router.post('/', async (req, res, next) => {
+router.post('/', verificarToken, async (req, res, next) => {
   const conn = await db.getConnection();
   try {
-    // TEMPORAL: usuario_id viene en el body hasta que exista el login (Persona 2).
-    // Después se reemplaza por req.usuario.id
-    const { usuario_id, mesa_id, fecha, hora, personas, preferencia } = req.body ?? {};
+    const usuario_id = req.usuario.id;
+    const { mesa_id, fecha, hora, personas, preferencia } = req.body ?? {};
 
-    if (!usuario_id || !fecha || !hora || !personas) {
-      return res.status(400).json({ error: 'Faltan datos: usuario_id, fecha, hora y personas' });
+    if (!fecha || !hora || !personas) {
+      return res.status(400).json({ error: 'Faltan datos: fecha, hora y personas' });
     }
     if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha) || !/^\d{2}:\d{2}$/.test(hora)) {
       return res.status(400).json({ error: 'Formato inválido: fecha AAAA-MM-DD y hora HH:MM' });
@@ -120,14 +120,11 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// Mis reservas  ->  GET /api/reservas/mias?usuario_id=1
+// Mis reservas  ->  GET /api/reservas/mias
 // TEMPORAL: usuario_id viene en la URL hasta que exista el login (Persona 2).
-router.get('/mias', async (req, res, next) => {
+router.get('/mias', verificarToken, async (req, res, next) => {
   try {
-    const usuarioId = Number(req.query.usuario_id);
-    if (!Number.isInteger(usuarioId) || usuarioId < 1) {
-      return res.status(400).json({ error: 'Falta usuario_id' });
-    }
+    const usuarioId = req.usuario.id;
     const [reservas] = await db.query(
       `SELECT r.id, r.codigo, r.mesa_id, m.numero AS mesa, m.ubicacion,
               r.fecha, r.hora, r.personas, r.preferencia, r.estado
@@ -143,14 +140,9 @@ router.get('/mias', async (req, res, next) => {
   }
 });
 
-// Cancelar una reserva  ->  DELETE /api/reservas/:id?usuario_id=1
-// No se borra de la base: solo cambia su estado a 'cancelada'.
-router.delete('/:id', async (req, res, next) => {
+router.delete('/:id', verificarToken, async (req, res, next) => {
   try {
-    const usuarioId = Number(req.query.usuario_id);
-    if (!Number.isInteger(usuarioId) || usuarioId < 1) {
-      return res.status(400).json({ error: 'Falta usuario_id' });
-    }
+    const usuarioId = req.usuario.id;
     const [resultado] = await db.query(
       `UPDATE reservas SET estado = 'cancelada'
        WHERE id = ? AND usuario_id = ? AND estado <> 'cancelada'`,
