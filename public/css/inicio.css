@@ -1,0 +1,467 @@
+
+/* ========================================
+   RESTAURANTE RATATOULLI
+   ESTILOS EXCLUSIVOS DE INICIO
+   ======================================== */
+
+.pagina-inicio {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #173b2b;
+    background: #ffffff;
+}
+
+.pagina-inicio *,
+.pagina-inicio *::before,
+.pagina-inicio *::after {
+    box-sizing: border-box;
+}
+
+.pagina-inicio a {
+    text-decoration: none;
+}
+
+/* ENCABEZADO */
+
+.pagina-inicio .encabezado-inicio {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 18px 7%;
+    background: #102d22;
+    color: white;
+    position: relative;
+    z-index: 2;
+}
+
+.marca-inicio {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: white;
+}
+
+.marca-icono {
+    width: 48px;
+    height: 48px;
+    display: grid;
+    place-items: center;
+    border: 1px solid #d7b777;
+    border-radius: 50%;
+    color: #d7b777;
+    font-family: Georgia, serif;
+    font-size: 30px;
+}
+
+.marca-inicio strong {
+    display: block;
+    font-family: Georgia, serif;
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+.marca-inicio small {
+    display: block;
+    margin-top: 4px;
+    color: #d7b777;
+    font-size: 9px;
+    letter-spacing: 2px;
+}
+
+.pagina-inicio .navegacion-inicio {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+.navegacion-inicio a {
+    color: #ffffff;
+    font-size: 14px;
+    transition: color 0.2s;
+}
+
+.navegacion-inicio a:hover,
+.navegacion-inicio .enlace-activo {
+    color: #d7b777;
+}
+
+.navegacion-inicio .nav-reservar {
+    background: #d7b777;
+    color: #102d22;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* PORTADA */
+
+.hero-inicio {
+    min-height: 610px;
+    display: flex;
+    align-items: center;
+    padding: 85px 8%;
+    background:
+        linear-gradient(
+            90deg,
+            rgba(9, 28, 21, 0.96) 0%,
+            rgba(9, 28, 21, 0.84) 47%,
+            rgba(9, 28, 21, 0.42) 100%
+        ),
+        url("../img/restaurante.jpg");
+
+    background-size: cover;
+    background-position: center;
+    color: white;
+}
+
+.hero-contenido {
+    max-width: 690px;
+}
+
+.etiqueta-inicio,
+.subtitulo-inicio {
+    display: inline-block;
+    color: #d7b777;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.hero-inicio h1 {
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: clamp(42px, 5.5vw, 74px);
+    line-height: 1.12;
+    font-weight: normal;
+    margin: 24px 0;
+    color: white;
+}
+
+.hero-inicio h1 span {
+    display: block;
+    color: #d7b777;
+    font-style: italic;
+}
+
+.hero-inicio p {
+    max-width: 540px;
+    font-size: 17px;
+    line-height: 1.9;
+    color: #e6e6e6;
+}
+
+.hero-botones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 35px;
+}
+
+.boton-dorado,
+.boton-contorno {
+    display: inline-block;
+    padding: 15px 28px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 14px;
+    transition: transform 0.2s, background 0.2s;
+}
+
+.boton-dorado {
+    background: #d7b777;
+    color: #102d22;
+}
+
+.boton-contorno {
+    border: 1px solid #d7b777;
+    color: white;
+}
+
+.boton-dorado:hover,
+.boton-contorno:hover {
+    transform: translateY(-3px);
+}
+
+.boton-dorado:hover {
+    background: #e8c98d;
+}
+
+.hero-detalle {
+    margin-top: 55px;
+    color: #d7b777;
+    font-size: 13px;
+    letter-spacing: 1px;
+}
+
+/* SOBRE NOSOTROS */
+
+.sobre-inicio {
+    max-width: 1250px;
+    margin: auto;
+    padding: 105px 7%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: 70px;
+}
+
+.sobre-imagen img {
+    width: 100%;
+    height: 440px;
+    object-fit: cover;
+    border-radius: 10px;
+    display: block;
+}
+
+.sobre-contenido h2,
+.titulo-seccion h2,
+.reserva-destacada h2 {
+    font-family: Georgia, serif;
+    font-weight: normal;
+}
+
+.sobre-contenido h2 {
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.2;
+    margin: 18px 0 25px;
+}
+
+.sobre-contenido h2 span {
+    color: #b28a45;
+}
+
+.sobre-contenido p {
+    color: #666;
+    line-height: 1.9;
+    margin-bottom: 18px;
+}
+
+.enlace-dorado {
+    display: inline-block;
+    margin-top: 15px;
+    color: #a57d37;
+    font-weight: bold;
+}
+
+/* EXPERIENCIA */
+
+.experiencia-inicio {
+    background: #f7f5ef;
+    padding: 95px 7%;
+}
+
+.titulo-seccion {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 45px;
+}
+
+.titulo-seccion h2 {
+    font-size: clamp(30px, 4vw, 44px);
+    margin: 15px 0;
+}
+
+.titulo-seccion p {
+    color: #666;
+    line-height: 1.7;
+}
+
+.tarjetas-experiencia {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.tarjeta-experiencia {
+    background: white;
+    border: 1px solid #eee8dd;
+    border-radius: 10px;
+    padding: 40px 30px;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.tarjeta-experiencia:hover {
+    transform: translateY(-6px);
+}
+
+.tarjeta-icono {
+    font-size: 38px;
+    margin-bottom: 22px;
+}
+
+.tarjeta-experiencia h3 {
+    font-family: Georgia, serif;
+    font-size: 23px;
+    margin-bottom: 15px;
+}
+
+.tarjeta-experiencia p {
+    color: #666;
+    line-height: 1.8;
+    font-size: 14px;
+}
+
+/* RESERVACIÓN DESTACADA */
+
+.reserva-destacada {
+    background: #173b2b;
+    text-align: center;
+    color: white;
+    padding: 90px 20px;
+}
+
+.reserva-destacada h2 {
+    max-width: 720px;
+    margin: 20px auto;
+    font-size: clamp(32px, 4vw, 48px);
+    line-height: 1.25;
+    color: white;
+}
+
+.reserva-destacada p {
+    color: #ddd;
+    margin-bottom: 35px;
+    line-height: 1.8;
+}
+
+/* PIE DE PÁGINA */
+
+.pagina-inicio .footer-inicio {
+    background: #0d241b;
+    color: white;
+    padding: 65px 7% 25px;
+}
+
+.footer-contenido {
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+}
+
+.footer-contenido h3 {
+    color: #d7b777;
+    font-family: Georgia, serif;
+    font-size: 28px;
+    margin-bottom: 15px;
+}
+
+.footer-contenido h4 {
+    color: #d7b777;
+    margin-bottom: 20px;
+}
+
+.footer-contenido p {
+    color: #c5cec9;
+    line-height: 1.8;
+    max-width: 300px;
+}
+
+.footer-contenido a {
+    display: block;
+    color: #c5cec9;
+    margin-bottom: 12px;
+}
+
+.footer-contenido a:hover {
+    color: #d7b777;
+}
+
+.footer-inferior {
+    max-width: 1200px;
+    margin: 50px auto 0;
+    padding-top: 25px;
+    border-top: 1px solid #365145;
+    text-align: center;
+    color: #aebbb3;
+    font-size: 13px;
+}
+
+/* DISEÑO RESPONSIVE */
+
+@media (max-width: 900px) {
+
+    .pagina-inicio .encabezado-inicio {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .pagina-inicio .navegacion-inicio {
+        justify-content: center;
+        gap: 18px;
+    }
+
+    .sobre-inicio {
+        grid-template-columns: 1fr;
+        gap: 35px;
+        padding: 70px 6%;
+    }
+
+    .sobre-imagen img {
+        height: 350px;
+    }
+
+    .tarjetas-experiencia {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-contenido {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .marca-inicio strong {
+        font-size: 21px;
+    }
+
+    .pagina-inicio .navegacion-inicio {
+        gap: 12px;
+    }
+
+    .navegacion-inicio a {
+        font-size: 13px;
+    }
+
+    .hero-inicio {
+        min-height: 540px;
+        padding: 65px 6%;
+        background-position: center;
+    }
+
+    .hero-inicio p {
+        font-size: 15px;
+    }
+
+    .hero-botones {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hero-detalle {
+        margin-top: 35px;
+    }
+
+    .sobre-imagen img {
+        height: 260px;
+    }
+
+    .experiencia-inicio {
+        padding: 65px 6%;
+    }
+
+    .tarjetas-experiencia {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-contenido {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+}

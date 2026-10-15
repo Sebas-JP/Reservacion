@@ -1,0 +1,223 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Reservas | Restaurante Ratatoulli</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <!-- ENCABEZADO -->
+
+    <header>
+
+        <h2>Restaurante Ratatoulli</h2>
+
+        <nav>
+
+            <a href="index.html">
+                Inicio
+            </a>
+
+            <a href="mesas.html">
+                Mesas
+            </a>
+
+            <a href="menu.html">
+                Menú
+            </a>
+
+            <a href="acceso-reserva.html">
+                Reservar
+            </a>
+
+        </nav>
+
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+
+    <main class="pagina-reservas">
+
+        <h1>Reserva tu mesa</h1>
+
+        <p>
+            Completa los datos de tu reservación.
+        </p>
+
+        <div class="formulario-contenedor">
+
+            <!-- INFORMACIÓN DE LA MESA -->
+
+            <div class="mesa-seleccionada">
+
+                <h2>Mesa seleccionada</h2>
+
+                <p id="info-mesa">
+                    Cargando información...
+                </p>
+
+                <a href="mesas.html">
+                    Cambiar mesa
+                </a>
+
+            </div>
+
+            <!-- AVISO DE AUTENTICACIÓN -->
+
+            <div class="aviso-autenticacion">
+
+                <strong>
+                    🔒 Reservación para clientes registrados
+                </strong>
+
+                <p>
+                    Para confirmar una reservación,
+                    primero debes iniciar sesión.
+                    La verificación de tu cuenta
+                    se realizará mediante el servidor.
+                </p>
+
+                <a href="acceso-reserva.html"
+                   id="enlace-acceso-reserva">
+                    Iniciar sesión o registrarse
+                </a>
+
+            </div>
+
+            <!-- FORMULARIO DE RESERVACIÓN -->
+
+            <form id="form-reserva">
+
+                <!-- FECHA -->
+
+                <label for="fecha">
+                    Fecha de reserva
+                </label>
+
+                <input
+                    type="date"
+                    id="fecha"
+                    name="fecha"
+                    required
+                >
+
+                <!-- HORA -->
+
+                <label for="hora">
+                    Hora de reserva
+                </label>
+
+                <select
+                    id="hora"
+                    name="hora"
+                    required>
+
+                    <option value="">
+                        Selecciona una hora
+                    </option>
+
+                    <option value="12:00">
+                        12:00 PM
+                    </option>
+
+                    <option value="13:00">
+                        1:00 PM
+                    </option>
+
+                    <option value="14:00">
+                        2:00 PM
+                    </option>
+
+                    <option value="18:00">
+                        6:00 PM
+                    </option>
+
+                    <option value="19:00">
+                        7:00 PM
+                    </option>
+
+                    <option value="20:00">
+                        8:00 PM
+                    </option>
+
+                    <option value="21:00">
+                        9:00 PM
+                    </option>
+
+                </select>
+
+                <!-- PERSONAS -->
+
+                <label for="personas">
+                    Número de personas
+                </label>
+
+                <input
+                    type="number"
+                    id="personas"
+                    name="personas"
+                    min="1"
+                    required
+                >
+
+                <!-- PREFERENCIA -->
+
+                <label for="preferencia">
+                    Preferencia especial (opcional)
+                </label>
+
+                <textarea
+                    id="preferencia"
+                    name="preferencia"
+                    rows="4"
+                    placeholder="Ej. Cumpleaños, aniversario..."></textarea>
+
+                <!-- BOTÓN -->
+
+                <button
+                    type="submit"
+                    class="boton">
+
+                    Continuar reserva
+
+                </button>
+
+            </form>
+
+            <!-- MENSAJE -->
+
+            <p
+                id="mensaje-reserva"
+                role="status"
+                aria-live="polite"></p>
+
+        </div>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer>
+
+        <p>
+            © 2026 Restaurante Ratatoulli
+        </p>
+
+    </footer>
+
+    <!-- JAVASCRIPT -->
+
+    <script src="js/reservas.js"></script>
+
+</body>
+</html>

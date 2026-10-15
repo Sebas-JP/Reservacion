@@ -1,0 +1,237 @@
+
+/* =====================================
+   RESTAURANTE RATATOULLI
+   ACCESO PREVIO A RESERVACIONES
+   ===================================== */
+
+.pagina-acceso-reserva {
+    margin: 0;
+    background: #f7f5ef;
+    color: #173b2b;
+    font-family: Arial, sans-serif;
+}
+
+.pagina-acceso-reserva * {
+    box-sizing: border-box;
+}
+
+/* ENCABEZADO */
+
+.encabezado-acceso {
+    background: #102d22;
+    color: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.encabezado-acceso h2 {
+    font-family: Georgia, serif;
+    color: #d7b777;
+    margin: 0;
+}
+
+.encabezado-acceso nav {
+    display: flex;
+    gap: 22px;
+    flex-wrap: wrap;
+}
+
+.encabezado-acceso nav a {
+    color: white;
+    text-decoration: none;
+}
+
+.encabezado-acceso nav a:hover {
+    color: #d7b777;
+}
+
+/* CONTENEDOR */
+
+.contenedor-acceso {
+    min-height: 75vh;
+    padding: 70px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* TARJETA PRINCIPAL */
+
+.tarjeta-acceso {
+    background: white;
+    width: 100%;
+    max-width: 800px;
+    padding: 45px;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.icono-acceso {
+    font-size: 38px;
+    margin-bottom: 18px;
+}
+
+.tarjeta-acceso h1 {
+    font-family: Georgia, serif;
+    font-size: 34px;
+    margin-bottom: 15px;
+}
+
+.descripcion-acceso {
+    color: #666;
+    line-height: 1.7;
+    max-width: 550px;
+    margin: 0 auto 35px;
+}
+
+/* OPCIONES */
+
+.opciones-acceso {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.opcion-acceso {
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    padding: 30px 20px;
+    background: #fafaf8;
+}
+
+.icono-opcion {
+    font-size: 34px;
+    margin-bottom: 15px;
+}
+
+.opcion-acceso h2 {
+    font-family: Georgia, serif;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.opcion-acceso p {
+    color: #666;
+    line-height: 1.7;
+    font-size: 14px;
+    min-height: 70px;
+}
+
+/* BOTONES */
+
+.btn-iniciar-acceso,
+.btn-registrar-acceso {
+    display: inline-block;
+    padding: 14px 22px;
+    border-radius: 7px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.btn-iniciar-acceso {
+    background: #173b2b;
+    color: white;
+}
+
+.btn-registrar-acceso {
+    background: #d7b777;
+    color: #102d22;
+}
+
+.btn-iniciar-acceso:hover {
+    background: #218653;
+}
+
+.btn-registrar-acceso:hover {
+    background: #e6c78a;
+}
+
+/* NOTAS */
+
+.nota-acceso {
+    color: #777;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 30px;
+}
+
+.volver-acceso {
+    display: inline-block;
+    margin-top: 20px;
+    color: #218653;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* PIE DE PÁGINA */
+
+.footer-acceso {
+    background: #102d22;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 650px) {
+
+    .encabezado-acceso {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .encabezado-acceso nav {
+        justify-content: center;
+    }
+
+    .tarjeta-acceso {
+        padding: 30px 20px;
+    }
+
+    .tarjeta-acceso h1 {
+        font-size: 27px;
+    }
+
+    .opciones-acceso {
+        grid-template-columns: 1fr;
+    }
+
+    .opcion-acceso p {
+        min-height: auto;
+    }
+}
+
+
+/* MESA SELECCIONADA */
+
+.informacion-mesa {
+    background: #f0f7f2;
+    border: 1px solid #c7e0ce;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.informacion-mesa[hidden] {
+    display: none;
+}
+
+.informacion-mesa h3 {
+    color: #173b2b;
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-family: Georgia, serif;
+}
+
+.informacion-mesa p {
+    color: #4d6255;
+    margin: 8px 0;
+    line-height: 1.6;
+}

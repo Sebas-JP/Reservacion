@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Confirmación | Restaurante Ratatoulli</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <!-- ENCABEZADO -->
+
+    <header>
+
+        <h2>Restaurante Ratatoulli</h2>
+
+        <nav>
+
+            <a href="index.html">Inicio</a>
+
+            <a href="mesas.html">Mesas</a>
+
+            <a href="menu.html">Menú</a>
+
+            <a href="acceso-reserva.html">Reservar</a>
+
+        </nav>
+
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+
+    <main class="pagina-confirmacion">
+
+        <div class="tarjeta-confirmacion">
+
+            <div class="icono-confirmacion">
+                ✓
+            </div>
+
+            <h1>Estado de tu reservación</h1>
+
+            <p>
+                Gracias por elegir Restaurante Ratatoulli.
+            </p>
+
+            <!-- AVISO DE DEMOSTRACIÓN -->
+
+            <p class="aviso-demo">
+
+                Esta pantalla está preparada para
+                mostrar una reservación confirmada
+                por el servidor.
+
+                Actualmente el sistema funciona
+                como demostración frontend.
+
+            </p>
+
+            <!-- DATOS DE CONFIRMACIÓN -->
+
+            <div id="datos-confirmacion" hidden>
+
+                <div class="codigo-reserva">
+
+                    <p>
+                        Código de reservación
+                    </p>
+
+                    <h2 id="codigo">---</h2>
+
+                </div>
+
+                <div class="detalle-confirmacion">
+
+                    <p>
+                        Mesa:
+                        <strong id="conf-mesa"></strong>
+                    </p>
+
+                    <p>
+                        Fecha:
+                        <strong id="conf-fecha"></strong>
+                    </p>
+
+                    <p>
+                        Hora:
+                        <strong id="conf-hora"></strong>
+                    </p>
+
+                    <p>
+                        Personas:
+                        <strong id="conf-personas"></strong>
+                    </p>
+
+                    <p>
+                        Preferencia:
+                        <strong id="conf-preferencia"></strong>
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- MENSAJE DEL SISTEMA -->
+
+            <p
+                id="mensaje-confirmacion"
+                role="status"
+                aria-live="polite">
+
+                Todavía no hay una reservación
+                confirmada para mostrar.
+
+            </p>
+
+            <!-- BOTONES -->
+
+            <a href="mesas.html"
+               class="boton">
+                Ver mesas disponibles
+            </a>
+
+            <a href="index.html"
+               class="boton">
+                Volver al inicio
+            </a>
+
+        </div>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer>
+
+        <p>
+            © 2026 Restaurante Ratatoulli
+        </p>
+
+    </footer>
+
+    <!-- JAVASCRIPT -->
+
+    <script src="js/confirmacion.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Registro de Clientes | Ratatoulli</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/registro.css">
+</head>
+
+<body class="pagina-registro">
+
+    <!-- ENCABEZADO -->
+
+    <header class="encabezado-registro">
+
+        <h2>Restaurante Ratatoulli</h2>
+
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="mesas.html">Mesas</a>
+            <a href="menu.html">Menú</a>
+            <a href="registro.html">Registrarse</a>
+            <a href="login.html">Iniciar sesión</a>
+        </nav>
+
+    </header>
+
+    <!-- REGISTRO DE CLIENTES -->
+
+    <main class="contenedor-registro">
+
+        <section class="tarjeta-registro">
+
+            <div class="titulo-registro">
+
+                <h1>Crear una cuenta</h1>
+
+                <p>
+                    Regístrate para disfrutar de una
+                    experiencia especial en Ratatoulli.
+                </p>
+
+            </div>
+
+            <!-- AVISO DE MESA SELECCIONADA -->
+
+            <div id="aviso-mesa-registro"
+                 class="aviso-mesa-registro"
+                 hidden>
+
+                <strong>🍽️ Reservación pendiente</strong>
+
+                <p id="texto-mesa-registro"></p>
+
+                <p>
+                    Conservaremos tu selección mientras
+                    completas el proceso de acceso.
+                </p>
+
+            </div>
+
+            <!-- FORMULARIO -->
+
+            <form id="form-registro">
+
+                <label for="nombre">
+                    Nombre completo
+                </label>
+
+                <input
+                    type="text"
+                    id="nombre"
+                    name="nombre"
+                    placeholder="Ingrese su nombre completo"
+                    autocomplete="name"
+                    maxlength="100"
+                    required
+                >
+
+                <label for="correo">
+                    Correo electrónico
+                </label>
+
+                <input
+                    type="email"
+                    id="correo"
+                    name="correo"
+                    placeholder="ejemplo@correo.com"
+                    autocomplete="email"
+                    required
+                >
+
+                <label for="telefono">
+                    Número de teléfono
+                </label>
+
+                <input
+                    type="tel"
+                    id="telefono"
+                    name="telefono"
+                    placeholder="Ejemplo: 5555-5555"
+                    autocomplete="tel"
+                    required
+                >
+
+                <label for="contrasena">
+                    Contraseña
+                </label>
+
+                <input
+                    type="password"
+                    id="contrasena"
+                    name="contrasena"
+                    placeholder="Mínimo 8 caracteres"
+                    autocomplete="new-password"
+                    minlength="8"
+                    required
+                >
+
+                <label for="confirmar-contrasena">
+                    Confirmar contraseña
+                </label>
+
+                <input
+                    type="password"
+                    id="confirmar-contrasena"
+                    name="confirmar-contrasena"
+                    placeholder="Repita su contraseña"
+                    autocomplete="new-password"
+                    minlength="8"
+                    required
+                >
+
+                <p id="mensaje-registro"
+                   role="status"
+                   aria-live="polite"></p>
+
+                <button type="submit"
+                        class="btn-registro">
+                    Crear cuenta
+                </button>
+
+            </form>
+
+            <!-- ENLACE AL LOGIN -->
+
+            <p class="texto-acceso">
+
+                ¿Ya tienes una cuenta?
+
+                <a href="login.html"
+                   id="enlace-login-registro">
+                    Iniciar sesión
+                </a>
+
+            </p>
+
+            <p class="nota-registro">
+                Formulario de demostración.
+                El registro real estará disponible
+                cuando se conecte con el servidor.
+            </p>
+
+        </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer class="footer-registro">
+        <p>© 2026 Restaurante Ratatoulli</p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+
+    <script src="js/registro.js"></script>
+    <script src="js/registro-mesa.js"></script>
+
+</body>
+</html>

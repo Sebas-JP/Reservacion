@@ -1,0 +1,256 @@
+
+/* =====================================
+   RESTAURANTE RATATOULLI
+   INICIO DE SESIÓN DE CLIENTES
+   ===================================== */
+
+.pagina-login {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f5ef;
+    color: #173b2b;
+}
+
+.pagina-login * {
+    box-sizing: border-box;
+}
+
+/* ENCABEZADO */
+
+.encabezado-login {
+    background: #102d22;
+    color: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.encabezado-login h2 {
+    font-family: Georgia, serif;
+    color: #d7b777;
+    margin: 0;
+}
+
+.encabezado-login nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+}
+
+.encabezado-login nav a {
+    color: white;
+    text-decoration: none;
+}
+
+.encabezado-login nav a:hover {
+    color: #d7b777;
+}
+
+/* CONTENEDOR */
+
+.contenedor-login {
+    min-height: 75vh;
+    padding: 65px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* TARJETA */
+
+.tarjeta-login {
+    background: white;
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.titulo-login {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.titulo-login h1 {
+    font-family: Georgia, serif;
+    font-size: 31px;
+    margin-bottom: 12px;
+}
+
+.titulo-login p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* FORMULARIO */
+
+#form-login {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#form-login > label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#form-login > input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+#form-login > input:focus {
+    outline: none;
+    border-color: #218653;
+    box-shadow: 0 0 0 2px rgba(33,134,83,0.12);
+}
+
+/* MOSTRAR CONTRASEÑA */
+
+.mostrar-contrasena {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.mostrar-contrasena input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.mostrar-contrasena label {
+    color: #555;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* MENSAJES */
+
+#mensaje-login {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+#mensaje-login:empty {
+    display: none;
+}
+
+/* BOTÓN */
+
+.btn-login {
+    margin-top: 12px;
+    padding: 15px;
+    background: #173b2b;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-login:hover {
+    background: #218653;
+}
+
+/* ENLACES */
+
+.texto-registro {
+    text-align: center;
+    margin-top: 25px;
+    color: #666;
+    line-height: 1.6;
+}
+
+.texto-registro a {
+    color: #218653;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nota-login {
+    text-align: center;
+    color: #777;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 22px;
+}
+
+/* PIE DE PÁGINA */
+
+.footer-login {
+    background: #102d22;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* DISEÑO PARA CELULARES */
+
+@media (max-width: 600px) {
+
+    .encabezado-login {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .encabezado-login nav {
+        justify-content: center;
+        gap: 14px;
+    }
+
+    .contenedor-login {
+        padding: 35px 15px;
+    }
+
+    .tarjeta-login {
+        padding: 25px;
+    }
+
+    .titulo-login h1 {
+        font-size: 27px;
+    }
+}
+
+
+
+/* =====================================
+   AVISO DE MESA SELECCIONADA
+   ===================================== */
+
+.aviso-mesa-login {
+    background: #f0f7f2;
+    border: 1px solid #c7e0ce;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.aviso-mesa-login[hidden] {
+    display: none;
+}
+
+.aviso-mesa-login strong {
+    display: block;
+    color: #173b2b;
+    margin-bottom: 8px;
+}
+
+.aviso-mesa-login p {
+    color: #4d6255;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 6px 0;
+}
+

@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Administrador | Ratatoulli</title>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <!-- ENCABEZADO -->
+    <header>
+        <h2>Restaurante Ratatoulli</h2>
+
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="mesas.html">Mesas</a>
+            <a href="menu.html">Menú</a>
+            <a href="reservas.html">Reservar</a>
+            <a href="admin.html">Administrador</a>
+        </nav>
+    </header>
+
+    <main class="pagina-admin">
+
+        <h1>Panel de Administración</h1>
+        <p>Control de reservas del restaurante</p>
+
+        <!-- ESTADÍSTICAS -->
+
+        <section class="estadisticas">
+
+            <div class="estadistica">
+                <h2 id="total-reservas">0</h2>
+                <p>Reservas mostradas</p>
+            </div>
+
+            <div class="estadistica">
+                <h2 id="total-personas">0</h2>
+                <p>Personas esperadas</p>
+            </div>
+
+            <div class="estadistica">
+                <h2 id="total-confirmadas">0</h2>
+                <p>Reservas confirmadas</p>
+            </div>
+
+            <div class="estadistica">
+                <h2 id="total-pendientes">0</h2>
+                <p>Reservas pendientes</p>
+            </div>
+
+        </section>
+
+        <!-- FORMULARIO PARA MODIFICAR -->
+
+        <section id="seccion-editar"
+                 class="seccion-editar"
+                 hidden>
+
+            <h2>Modificar reserva</h2>
+
+            <p>
+                Código:
+                <strong id="codigo-editar"></strong>
+            </p>
+
+            <form id="form-editar">
+
+                <label for="editar-mesa">
+                    Seleccionar mesa:
+                </label>
+
+                <select id="editar-mesa" required>
+                    <option value="1">Mesa 1 - 2 personas</option>
+                    <option value="2">Mesa 2 - 4 personas</option>
+                    <option value="3">Mesa 3 - 6 personas</option>
+                    <option value="4">Mesa 4 - 4 personas</option>
+                    <option value="5">Mesa 5 - 2 personas</option>
+                    <option value="6">Mesa 6 - 8 personas</option>
+                </select>
+
+                <label for="editar-fecha">
+                    Fecha de reserva:
+                </label>
+
+                <input type="date"
+                       id="editar-fecha"
+                       required>
+
+                <label for="editar-hora">
+                    Hora de reserva:
+                </label>
+
+                <select id="editar-hora" required>
+                    <option value="12:00">12:00 PM</option>
+                    <option value="13:00">1:00 PM</option>
+                    <option value="14:00">2:00 PM</option>
+                    <option value="18:00">6:00 PM</option>
+                    <option value="19:00">7:00 PM</option>
+                    <option value="20:00">8:00 PM</option>
+                    <option value="21:00">9:00 PM</option>
+                </select>
+
+                <label for="editar-personas">
+                    Número de personas:
+                </label>
+
+                <input type="number"
+                       id="editar-personas"
+                       min="1"
+                       required>
+
+                <p id="capacidad-editar"></p>
+
+                <p id="mensaje-editar"
+                   role="status"
+                   aria-live="polite"></p>
+
+                <div class="botones-editar">
+
+                    <button type="submit"
+                            class="btn-guardar">
+                        Guardar cambios
+                    </button>
+
+                    <button type="button"
+                            id="btn-cerrar-editar"
+                            class="btn-cancelar">
+                        Cerrar
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <!-- LISTADO DE RESERVAS -->
+
+        <section class="seccion-reservas">
+
+            <h2>Listado de reservas</h2>
+
+            <label for="filtro-fecha">
+                Filtrar por fecha:
+            </label>
+
+            <input type="date" id="filtro-fecha">
+
+            <div class="tabla-contenedor">
+
+                <table class="tabla-reservas">
+
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Mesa</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Personas</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabla-body">
+                        <!-- JavaScript carga las reservas -->
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer>
+        <p>© 2026 Restaurante Ratatoulli</p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+
+    <script src="js/admin.js"></script>
+
+</body>
+</html>
