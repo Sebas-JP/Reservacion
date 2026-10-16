@@ -43,3 +43,9 @@ CREATE TABLE IF NOT EXISTS reservas (
   -- Una misma mesa no puede tener dos reservas vigentes en la misma fecha y hora
   UNIQUE KEY idx_reservas_sin_conflicto (mesa_id, fecha, hora, bloquea_mesa)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+
+-- Persona 3: código de confirmación y preferencia de la reserva
+ALTER TABLE reservas ADD COLUMN IF NOT EXISTS codigo VARCHAR(10) NULL;
+ALTER TABLE reservas ADD COLUMN IF NOT EXISTS preferencia VARCHAR(255) NULL;
+ALTER TABLE reservas ADD UNIQUE INDEX IF NOT EXISTS idx_reservas_codigo (codigo);
