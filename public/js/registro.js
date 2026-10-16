@@ -22,8 +22,6 @@ formulario.addEventListener("submit", function(event) {
     const correo = document.getElementById("correo")
         .value.trim();
 
-    const telefono = document.getElementById("telefono")
-        .value.trim();
 
     const contrasena = document.getElementById("contrasena")
         .value;
@@ -52,14 +50,6 @@ formulario.addEventListener("submit", function(event) {
         return;
     }
 
-    // VALIDAR TELÉFONO DE GUATEMALA
-    const telefonoLimpio = telefono.replace(/[\s-]/g, "");
-
-    if (!/^\d{8}$/.test(telefonoLimpio)) {
-        mensaje.textContent =
-            "El teléfono debe contener 8 dígitos.";
-        return;
-    }
 
     // VALIDAR CONTRASEÑA
     if (contrasena.length < 8) {
