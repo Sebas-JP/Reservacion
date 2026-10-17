@@ -38,7 +38,7 @@ verClaveAdmin.addEventListener("change", function() {
 
 // VALIDAR FORMULARIO
 
-formularioAdmin.addEventListener("submit", function(event) {
+formularioAdmin.addEventListener("submit", async function(event) {
 
     event.preventDefault();
 
@@ -67,15 +67,47 @@ formularioAdmin.addEventListener("submit", function(event) {
         return;
     }
 
-    // DEMOSTRACIÓN
-    // La verificación real corresponde al backend.
-    // No se concede acceso administrativo.
+        // ENVIAR AL SERVIDOR
 
-    mensajeAdmin.style.color = "#173b2b";
+    const boton = formularioAdmin.querySelector("button[type='submit']");
+    if (boton) boton.disabled = true;
 
-    mensajeAdmin.textContent =
-        "Formulario validado. " +
-        "El acceso administrativo estará disponible " +
-        "cuando se implemente la autenticación del servidor.";
+    try {
+        const respuesta = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ correo, contrasena })
+        });
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+            mensajeAdmin.textContent =
+                datos.mensaje || datos.error || "No se pudo iniciar sesión.";
+            if (boton) boton.disabled = false;
+            return;
+        }
+
+        // Solo los administradores pueden entrar a este panel
+        if (datos.usuario.rol !== "admin") {
+            mensajeAdmin.textContent =
+                "Esta cuenta no tiene permisos de administrador.";
+            if (boton) boton.disabled = false;
+            return;
+        }
+
+        localStorage.setItem("token", datos.token);
+        localStorage.setItem("usuario", JSON.stringify(datos.usuario));
+
+        mensajeAdmin.style.color = "#173b2b";
+        mensajeAdmin.textContent = "Acceso concedido. Redirigiendo...";
+
+        window.location.href = "admin.html";
+
+    } catch (error) {
+        mensajeAdmin.textContent =
+            "No se pudo conectar con el servidor. Intenta de nuevo.";
+        if (boton) boton.disabled = false;
+    }
 
 });
