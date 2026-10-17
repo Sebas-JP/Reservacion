@@ -1,61 +1,29 @@
-
 /* =====================================
    RESTAURANTE RATATOULLI
-   CONFIRMACIÓN DE RESERVACIONES
+   CONFIRMACIÓN DE RESERVACIONES (datos reales del servidor)
    ===================================== */
 
-// OBTENER ELEMENTOS DEL HTML
+const contenedor = document.getElementById("datos-confirmacion");
+const mensaje = document.getElementById("mensaje-confirmacion");
 
-const contenedor = document.getElementById(
-    "datos-confirmacion"
-);
+const guardada = sessionStorage.getItem("reservaConfirmada");
 
-const mensaje = document.getElementById(
-    "mensaje-confirmacion"
-);
+if (!guardada) {
+    contenedor.hidden = true;
+    mensaje.textContent = "Todavía no hay una reservación para mostrar.";
+} else {
+    const r = JSON.parse(guardada);
 
-// OCULTAR LOS DATOS DE CONFIRMACIÓN
+    document.getElementById("codigo").textContent = r.codigo;
+    document.getElementById("conf-mesa").textContent = r.mesa;
+    document.getElementById("conf-fecha").textContent = r.fecha;
+    document.getElementById("conf-hora").textContent = r.hora;
+    document.getElementById("conf-personas").textContent = r.personas;
+    document.getElementById("conf-preferencia").textContent =
+        r.preferencia || "Ninguna";
 
-contenedor.hidden = true;
-
-// ELIMINAR DATOS ANTIGUOS DE DEMOSTRACIÓN
-
-// Antes se guardaban reservaciones de prueba
-// en sessionStorage.
-//
-// Ya no utilizaremos esos datos para
-// mostrar reservaciones confirmadas.
-
-sessionStorage.removeItem("reservaTemporal");
-
-// MOSTRAR ESTADO ACTUAL
-
-mensaje.textContent =
-    "Todavía no hay una reservación confirmada. " +
-    "Cuando se conecte el backend, aquí podrás " +
-    "consultar los detalles de tu reservación.";
-
-mensaje.style.color = "#4d6255";
-
-// =====================================
-// INTEGRACIÓN FUTURA CON EL BACKEND
-// =====================================
-
-// Cuando el backend esté conectado:
-//
-// 1. El servidor verificará la sesión del cliente.
-//
-// 2. Comprobará que la mesa esté disponible.
-//
-// 3. Guardará la reservación en la base de datos.
-//
-// 4. Generará un código de reservación real.
-//
-// 5. Devolverá los datos confirmados.
-//
-// 6. Esta página mostrará esos datos.
-//
-// IMPORTANTE:
-// No debemos generar códigos de reservación
-// desde el navegador ni considerar que
-// sessionStorage demuestra una reserva real.
+    contenedor.hidden = false;
+    mensaje.textContent =
+        "¡Reservación creada! Guarda tu código para presentarlo en el restaurante.";
+    mensaje.style.color = "#173b2b";
+}

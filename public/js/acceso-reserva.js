@@ -39,7 +39,7 @@ const enlaceRegistro = document.getElementById(
 
 // Solo aceptar los números de las mesas
 // disponibles en nuestro plano de ejemplo
-const mesasValidas = ["1", "3", "5", "6"];
+const mesasValidas = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
 if (mesasValidas.includes(numeroMesa)) {
 
@@ -73,4 +73,11 @@ if (mesasValidas.includes(numeroMesa)) {
     enlaceLogin.href = "login.html";
     enlaceRegistro.href = "registro.html";
 
+}
+
+// Si ya hay sesión de cliente, ir directo a reservar
+if (localStorage.getItem("token")) {
+    window.location.href = numeroMesa
+        ? "reservas.html?mesa=" + encodeURIComponent(numeroMesa)
+        : "mesas.html";
 }

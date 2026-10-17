@@ -44,7 +44,7 @@ verContrasena.addEventListener("change", function() {
 // VALIDAR FORMULARIO
 // =====================================
 
-formularioLogin.addEventListener("submit", function(event) {
+formularioLogin.addEventListener("submit", async function(event) {
 
     // Evitar que se recargue la página
     event.preventDefault();
@@ -79,41 +79,55 @@ formularioLogin.addEventListener("submit", function(event) {
         return;
     }
 
-    // =====================================
-    // LOGIN PENDIENTE DE BACKEND
-    // =====================================
-
-    // Aquí se conectará posteriormente
-    // la autenticación real del servidor.
-    //
-    // El backend deberá:
-    // 1. Verificar el correo y la contraseña.
-    // 2. Identificar al cliente.
-    // 3. Crear una sesión segura.
-    // 4. Autorizar el acceso a reservaciones.
-    //
-    // No guardamos contraseñas en el navegador.
-    // No simulamos que el cliente inició sesión.
-
-    mensajeLogin.style.color = "green";
-
-    mensajeLogin.textContent =
-        "Los datos del formulario son válidos. " +
-        "El inicio de sesión todavía no está disponible. " +
-        "Falta conectar la autenticación con el servidor.";
-
-    // =====================================
-    // MESA SELECCIONADA
+        // =====================================
+    // ENVIAR LOGIN AL SERVIDOR
     // =====================================
 
-    // La mesa ya está conservada mediante
-    // login-mesa.js y sessionStorage.
-    //
-    // Cuando el backend confirme que el cliente
-    // inició sesión correctamente, se podrá
-    // recuperar la mesa y continuar a reservas.html.
-    //
-    // No redirigimos todavía porque no existe
-    // una sesión autenticada real.
+    const boton = formularioLogin.querySelector("button[type='submit']");
+    if (boton) boton.disabled = true;
+
+    try {
+        const respuesta = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ correo, contrasena })
+        });
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+            mensajeLogin.textContent =
+                datos.mensaje || datos.error || "No se pudo iniciar sesión.";
+            if (boton) boton.disabled = false;
+            return;
+        }
+
+        // Un administrador debe entrar por su propia pantalla
+        if (datos.usuario.rol === "admin") {
+            mensajeLogin.textContent =
+                "Esta cuenta es de administrador. Usa el acceso administrativo.";
+            if (boton) boton.disabled = false;
+            return;
+        }
+
+        // Guardar la sesión (mismos nombres que usa el login de admin)
+        localStorage.setItem("token", datos.token);
+        localStorage.setItem("usuario", JSON.stringify(datos.usuario));
+
+        mensajeLogin.style.color = "green";
+        mensajeLogin.textContent = "Inicio de sesión correcto. Redirigiendo...";
+
+        // Si el cliente venía de elegir una mesa, seguir a reservas
+        // con esa mesa; si no, ir al catálogo de mesas.
+        const mesa = sessionStorage.getItem("mesaSeleccionada");
+        window.location.href = mesa
+            ? "reservas.html?mesa=" + encodeURIComponent(mesa)
+            : "mesas.html";
+
+    } catch (error) {
+        mensajeLogin.textContent =
+            "No se pudo conectar con el servidor. Intenta de nuevo.";
+        if (boton) boton.disabled = false;
+    }
 
 });
