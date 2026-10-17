@@ -1,0 +1,227 @@
+
+/* REGISTRO DE CLIENTES */
+
+.pagina-registro {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f5ef;
+    color: #173b2b;
+}
+
+.pagina-registro * {
+    box-sizing: border-box;
+}
+
+/* ENCABEZADO */
+
+.encabezado-registro {
+    background: #102d22;
+    color: white;
+    padding: 22px 7%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.encabezado-registro h2 {
+    font-family: Georgia, serif;
+    color: #d7b777;
+    margin: 0;
+}
+
+.encabezado-registro nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+}
+
+.encabezado-registro nav a {
+    color: white;
+    text-decoration: none;
+}
+
+.encabezado-registro nav a:hover {
+    color: #d7b777;
+}
+
+/* CONTENEDOR */
+
+.contenedor-registro {
+    min-height: 75vh;
+    padding: 65px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* TARJETA */
+
+.tarjeta-registro {
+    background: white;
+    width: 100%;
+    max-width: 480px;
+    padding: 40px;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+}
+
+.titulo-registro {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.titulo-registro h1 {
+    font-family: Georgia, serif;
+    font-size: 32px;
+    margin-bottom: 12px;
+}
+
+.titulo-registro p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* FORMULARIO */
+
+#form-registro {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+#form-registro label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#form-registro input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+#form-registro input:focus {
+    outline: none;
+    border-color: #218653;
+    box-shadow: 0 0 0 2px rgba(33,134,83,0.12);
+}
+
+/* BOTÓN */
+
+.btn-registro {
+    margin-top: 15px;
+    padding: 15px;
+    background: #173b2b;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-registro:hover {
+    background: #218653;
+}
+
+/* MENSAJES */
+
+#mensaje-registro {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+#mensaje-registro:empty {
+    display: none;
+}
+
+.texto-acceso {
+    text-align: center;
+    margin-top: 25px;
+    color: #666;
+}
+
+.texto-acceso a {
+    color: #218653;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.nota-registro {
+    text-align: center;
+    color: #777;
+    font-size: 12px;
+    line-height: 1.6;
+    margin-top: 22px;
+}
+
+/* PIE DE PÁGINA */
+
+.footer-registro {
+    background: #102d22;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* CELULARES */
+
+@media (max-width: 600px) {
+
+    .encabezado-registro {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .encabezado-registro nav {
+        justify-content: center;
+    }
+
+    .contenedor-registro {
+        padding: 35px 15px;
+    }
+
+    .tarjeta-registro {
+        padding: 25px;
+    }
+
+    .titulo-registro h1 {
+        font-size: 27px;
+    }
+}
+
+
+
+/* =====================================
+   AVISO DE MESA SELECCIONADA
+   ===================================== */
+
+.aviso-mesa-registro {
+    background: #f0f7f2;
+    border: 1px solid #c7e0ce;
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.aviso-mesa-registro[hidden] {
+    display: none;
+}
+
+.aviso-mesa-registro strong {
+    display: block;
+    color: #173b2b;
+    margin-bottom: 8px;
+}
+
+.aviso-mesa-registro p {
+    color: #4d6255;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 6px 0;
+}

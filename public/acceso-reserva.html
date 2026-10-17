@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Antes de reservar | Ratatoulli</title>
+
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/acceso-reserva.css">
+</head>
+
+<body class="pagina-acceso-reserva">
+
+    <!-- ENCABEZADO -->
+
+    <header class="encabezado-acceso">
+
+        <h2>Restaurante Ratatoulli</h2>
+
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="mesas.html">Mesas</a>
+            <a href="menu.html">Menú</a>
+        </nav>
+
+    </header>
+
+    <!-- CONTENIDO PRINCIPAL -->
+
+    <main class="contenedor-acceso">
+
+        <section class="tarjeta-acceso">
+
+            <div class="icono-acceso">
+                🔒
+            </div>
+
+            <h1>Antes de reservar tu mesa</h1>
+
+            <p class="descripcion-acceso">
+                Para realizar una reservación en
+                Restaurante Ratatoulli, necesitas
+                tener una cuenta de cliente.
+            </p>
+
+            <!-- MESA SELECCIONADA -->
+
+            <div id="informacion-mesa"
+                 class="informacion-mesa"
+                 hidden>
+
+                <h3>🍽️ Tu mesa seleccionada</h3>
+
+                <p id="mesa-seleccionada"></p>
+
+                <p>
+                    Inicia sesión o regístrate
+                    para continuar con tu solicitud.
+                </p>
+
+            </div>
+
+            <!-- OPCIONES DE ACCESO -->
+
+            <div class="opciones-acceso">
+
+                <!-- CLIENTE REGISTRADO -->
+
+                <div class="opcion-acceso">
+
+                    <div class="icono-opcion">
+                        👤
+                    </div>
+
+                    <h2>¿Ya tienes una cuenta?</h2>
+
+                    <p>
+                        Inicia sesión con tu correo
+                        electrónico y contraseña.
+                    </p>
+
+                    <a href="login.html"
+                       id="enlace-login"
+                       class="btn-iniciar-acceso">
+                        Iniciar sesión
+                    </a>
+
+                </div>
+
+                <!-- CLIENTE NUEVO -->
+
+                <div class="opcion-acceso">
+
+                    <div class="icono-opcion">
+                        📝
+                    </div>
+
+                    <h2>¿Eres un cliente nuevo?</h2>
+
+                    <p>
+                        Crea tu cuenta para preparar
+                        tu primera visita al restaurante.
+                    </p>
+
+                    <a href="registro.html"
+                       id="enlace-registro"
+                       class="btn-registrar-acceso">
+                        Registrarse
+                    </a>
+
+                </div>
+
+            </div>
+
+            <p class="nota-acceso">
+                El registro y el inicio de sesión
+                estarán disponibles cuando se
+                conecten con el servidor.
+            </p>
+
+            <a href="index.html"
+               class="volver-acceso">
+                ← Volver al inicio
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- PIE DE PÁGINA -->
+
+    <footer class="footer-acceso">
+        <p>© 2026 Restaurante Ratatoulli</p>
+    </footer>
+
+    <!-- JAVASCRIPT -->
+
+    <script src="js/acceso-reserva.js"></script>
+
+</body>
+</html>

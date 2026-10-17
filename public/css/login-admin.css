@@ -1,0 +1,224 @@
+
+/* ======================================
+   RESTAURANTE RATATOULLI
+   ACCESO ADMINISTRATIVO
+   ====================================== */
+
+.pagina-login-admin {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f7f5ef;
+    color: #173b2b;
+}
+
+.pagina-login-admin * {
+    box-sizing: border-box;
+}
+
+/* ENCABEZADO */
+
+.encabezado-login-admin {
+    background: #102d22;
+    color: white;
+    padding: 22px 7%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.encabezado-login-admin h2 {
+    font-family: Georgia, serif;
+    color: #d7b777;
+    margin: 0;
+}
+
+.encabezado-login-admin nav a {
+    color: white;
+    text-decoration: none;
+}
+
+.encabezado-login-admin nav a:hover {
+    color: #d7b777;
+}
+
+/* CONTENEDOR */
+
+.contenedor-login-admin {
+    min-height: 75vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 65px 20px;
+}
+
+/* TARJETA */
+
+.tarjeta-login-admin {
+    width: 100%;
+    max-width: 460px;
+    background: white;
+    padding: 40px;
+    border-radius: 14px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+/* ICONO */
+
+.icono-admin {
+    width: 75px;
+    height: 75px;
+    margin: 0 auto 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #edf3ef;
+    border-radius: 50%;
+    font-size: 35px;
+}
+
+/* TÍTULO */
+
+.titulo-login-admin h1 {
+    font-family: Georgia, serif;
+    font-size: 30px;
+    margin-bottom: 12px;
+}
+
+.titulo-login-admin p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+/* FORMULARIO */
+
+#form-login-admin {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    text-align: left;
+}
+
+#form-login-admin > label {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#form-login-admin > input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 7px;
+    font-size: 15px;
+}
+
+#form-login-admin > input:focus {
+    outline: none;
+    border-color: #218653;
+    box-shadow: 0 0 0 2px rgba(33,134,83,0.12);
+}
+
+/* MOSTRAR CONTRASEÑA */
+
+.mostrar-clave-admin {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 5px;
+}
+
+.mostrar-clave-admin input {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.mostrar-clave-admin label {
+    color: #555;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* BOTÓN */
+
+.btn-acceder-admin {
+    background: #173b2b;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 7px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 12px;
+}
+
+.btn-acceder-admin:hover {
+    background: #218653;
+}
+
+/* MENSAJES */
+
+#mensaje-admin {
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+#mensaje-admin:empty {
+    display: none;
+}
+
+/* AVISO */
+
+.aviso-admin {
+    margin-top: 28px;
+    padding: 15px;
+    background: #f7f5ef;
+    border-radius: 8px;
+    color: #666;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.volver-admin {
+    display: inline-block;
+    margin-top: 25px;
+    color: #218653;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* PIE DE PÁGINA */
+
+.footer-login-admin {
+    background: #102d22;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+/* CELULARES */
+
+@media (max-width: 600px) {
+
+    .encabezado-login-admin {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .contenedor-login-admin {
+        padding: 35px 15px;
+    }
+
+    .tarjeta-login-admin {
+        padding: 25px;
+    }
+
+    .titulo-login-admin h1 {
+        font-size: 26px;
+    }
+}
