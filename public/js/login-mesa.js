@@ -20,7 +20,7 @@ if (!mesaPendienteLogin) {
 }
 
 // Mesas disponibles del ejemplo
-const mesasValidasLogin = ["1", "3", "5", "6"];
+const mesasValidasLogin = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
 // Elementos de la página
 const avisoMesaLogin = document.getElementById(
