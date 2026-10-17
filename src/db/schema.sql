@@ -45,6 +45,16 @@ CREATE TABLE IF NOT EXISTS reservas (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 
+-- Persona 2: tabla de menú del día
+CREATE TABLE IF NOT EXISTS menu (
+  id          INT AUTO_INCREMENT PRIMARY KEY,
+  nombre      VARCHAR(150) NOT NULL,
+  descripcion TEXT NULL,
+  precio      DECIMAL(10,2) NOT NULL,
+  imagen_url  VARCHAR(255) NULL,
+  disponible  TINYINT(1) NOT NULL DEFAULT 1          -- 1 = visible, 0 = oculto
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- Persona 3: código de confirmación y preferencia de la reserva
 ALTER TABLE reservas ADD COLUMN IF NOT EXISTS codigo VARCHAR(10) NULL;
 ALTER TABLE reservas ADD COLUMN IF NOT EXISTS preferencia VARCHAR(255) NULL;

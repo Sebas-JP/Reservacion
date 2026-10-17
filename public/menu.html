@@ -1,14 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menú | Restaurante Ratatoulli</title>
-
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -16,7 +12,6 @@
 
     <header>
         <h2>Restaurante Ratatoulli</h2>
-
         <nav>
             <a href="index.html">Inicio</a>
             <a href="mesas.html">Mesas</a>
@@ -30,85 +25,15 @@
         <h1>Nuestro Menú del Día</h1>
         <p>Descubre los sabores de Francia.</p>
 
-        <div class="contenedor-menu">
-
-            <!-- PLATO 1 -->
-            <article class="plato">
-                <img src="img/ratatouille.jpg"
-                     alt="Ratatouille tradicional">
-
-                <div class="plato-info">
-                    <h2>Ratatouille tradicional</h2>
-
-                    <p>
-                        Verduras frescas cocinadas
-                        al estilo francés.
-                    </p>
-
-                    <span class="precio">Q65.00</span>
-                </div>
-            </article>
-
-            <!-- PLATO 2 -->
-            <article class="plato">
-                <img src="img/coq-au-vin.jpg"
-                     alt="Coq au Vin">
-
-                <div class="plato-info">
-                    <h2>Coq au Vin</h2>
-
-                    <p>
-                        Pollo cocinado lentamente
-                        en una deliciosa salsa de vino.
-                    </p>
-
-                    <span class="precio">Q95.00</span>
-                </div>
-            </article>
-
-            <!-- PLATO 3 -->
-            <article class="plato">
-                <img src="img/boeuf.jpg"
-                     alt="Boeuf Bourguignon">
-
-                <div class="plato-info">
-                    <h2>Boeuf Bourguignon</h2>
-
-                    <p>
-                        Carne de res preparada con
-                        verduras y salsa tradicional.
-                    </p>
-
-                    <span class="precio">Q110.00</span>
-                </div>
-            </article>
-
-            <!-- PLATO 4 -->
-            <article class="plato">
-                <img src="img/creme-brulee.jpg"
-                     alt="Crème Brûlée">
-
-                <div class="plato-info">
-                    <h2>Crème Brûlée</h2>
-
-                    <p>
-                        Delicioso postre francés
-                        con crema y caramelo.
-                    </p>
-
-                    <span class="precio">Q45.00</span>
-                </div>
-            </article>
-
+        <!-- Los platos se cargan aquí dinámicamente desde /api/menu -->
+        <div class="contenedor-menu" id="contenedor-menu">
+            <p id="cargando">Cargando menú...</p>
         </div>
 
         <div class="menu-reserva">
             <h2>¿Te gustaría visitarnos?</h2>
             <p>Reserva tu mesa y disfruta nuestro menú.</p>
-
-            <a href="mesas.html" class="boton">
-                Reservar una mesa
-            </a>
+            <a href="mesas.html" class="boton">Reservar una mesa</a>
         </div>
 
     </main>
@@ -116,6 +41,42 @@
     <footer>
         <p>© 2026 Restaurante Ratatoulli</p>
     </footer>
+
+    <script>
+        // Pide los platos a la API y los muestra en la página
+        async function cargarMenu() {
+            const contenedor = document.getElementById('contenedor-menu');
+
+            try {
+                const respuesta = await fetch('/api/menu');
+                const platos = await respuesta.json();
+
+                if (!platos.length) {
+                    contenedor.innerHTML = '<p>No hay platos disponibles por el momento.</p>';
+                    return;
+                }
+
+                // Genera una tarjeta por cada plato
+                contenedor.innerHTML = platos.map(plato => `
+                    <article class="plato">
+                        <img src="${plato.imagen_url || 'img/default.jpg'}"
+                             alt="${plato.nombre}">
+                        <div class="plato-info">
+                            <h2>${plato.nombre}</h2>
+                            <p>${plato.descripcion || ''}</p>
+                            <span class="precio">Q${Number(plato.precio).toFixed(2)}</span>
+                        </div>
+                    </article>
+                `).join('');
+
+            } catch (error) {
+                contenedor.innerHTML = '<p>Error al cargar el menú. Intenta de nuevo más tarde.</p>';
+                console.error('Error cargando menú:', error);
+            }
+        }
+
+        cargarMenu();
+    </script>
 
 </body>
 </html>
