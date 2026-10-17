@@ -22,7 +22,7 @@ if (!mesaPendienteRegistro) {
 }
 
 // Mesas disponibles en nuestro ejemplo
-const mesasValidasRegistro = ["1", "3", "5", "6"];
+const mesasValidasRegistro = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
 // Obtener elementos del HTML
 const avisoMesaRegistro = document.getElementById(
