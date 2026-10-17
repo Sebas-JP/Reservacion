@@ -6,6 +6,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Menú | Restaurante Ratatoulli</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Panel de administración de menú */
+        .seccion-admin-menu {
+            max-width: 650px;
+            margin: 30px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .seccion-admin-menu h2 {
+            color: #173b2b;
+            margin-bottom: 20px;
+        }
+
+        #form-plato {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
+
+        #form-plato label {
+            font-weight: bold;
+            color: #173b2b;
+        }
+
+        #form-plato input,
+        #form-plato textarea {
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: Arial, sans-serif;
+            width: 100%;
+        }
+
+        #form-plato input:focus,
+        #form-plato textarea:focus {
+            outline: 2px solid #d8b579;
+            border-color: #173b2b;
+        }
+
+        #form-plato button {
+            margin-top: 10px;
+            padding: 14px;
+            background-color: #218653;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        #form-plato button:hover {
+            background-color: #176b42;
+        }
+
+        #mensaje-plato {
+            margin-top: 12px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .btn-eliminar-plato {
+            background: #c34c4c;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        .btn-eliminar-plato:hover {
+            background: #a33;
+        }
+    </style>
 </head>
 
 <body>
@@ -25,6 +105,33 @@
         <h1>Nuestro Menú del Día</h1>
         <p>Descubre los sabores de Francia.</p>
 
+        <!-- Panel admin: solo visible si hay token de admin -->
+        <section class="seccion-admin-menu" id="panel-admin" hidden>
+
+            <h2>Agregar plato al menú</h2>
+
+            <form id="form-plato">
+
+                <label for="plato-nombre">Nombre del plato:</label>
+                <input type="text" id="plato-nombre" placeholder="Ej: Ratatouille tradicional" required>
+
+                <label for="plato-descripcion">Descripción:</label>
+                <textarea id="plato-descripcion" rows="3" placeholder="Ej: Verduras frescas cocinadas al estilo francés."></textarea>
+
+                <label for="plato-precio">Precio (Q):</label>
+                <input type="number" id="plato-precio" min="0.01" step="0.01" placeholder="Ej: 65.00" required>
+
+                <label for="plato-imagen">URL de imagen:</label>
+                <input type="text" id="plato-imagen" placeholder="Ej: img/ratatouille.jpg">
+
+                <button type="submit">Agregar plato</button>
+
+                <p id="mensaje-plato" role="status" aria-live="polite"></p>
+
+            </form>
+
+        </section>
+
         <!-- Los platos se cargan aquí dinámicamente desde /api/menu -->
         <div class="contenedor-menu" id="contenedor-menu">
             <p id="cargando">Cargando menú...</p>
@@ -43,9 +150,27 @@
     </footer>
 
     <script>
-        // Pide los platos a la API y los muestra en la página
+        // Lee el token guardado en localStorage (lo guarda login.js al iniciar sesión)
+        function obtenerToken() {
+            return localStorage.getItem('token');
+        }
+
+        // Decodifica el payload del token para saber el rol del usuario
+        function obtenerRol() {
+            const token = obtenerToken();
+            if (!token) return null;
+            try {
+                const payload = JSON.parse(atob(token.split('.')[1]));
+                return payload.rol;
+            } catch {
+                return null;
+            }
+        }
+
+        // Carga los platos desde /api/menu y los muestra en la página
         async function cargarMenu() {
             const contenedor = document.getElementById('contenedor-menu');
+            const esAdmin = obtenerRol() === 'admin';
 
             try {
                 const respuesta = await fetch('/api/menu');
@@ -59,12 +184,13 @@
                 // Genera una tarjeta por cada plato
                 contenedor.innerHTML = platos.map(plato => `
                     <article class="plato">
-                        <img src="${plato.imagen_url || 'img/default.jpg'}"
+                        <img src="${plato.imagen_url || 'img/ratatouille.jpg'}"
                              alt="${plato.nombre}">
                         <div class="plato-info">
                             <h2>${plato.nombre}</h2>
                             <p>${plato.descripcion || ''}</p>
                             <span class="precio">Q${Number(plato.precio).toFixed(2)}</span>
+                            ${esAdmin ? `<button class="btn-eliminar-plato" onclick="eliminarPlato(${plato.id})">Eliminar</button>` : ''}
                         </div>
                     </article>
                 `).join('');
@@ -75,6 +201,74 @@
             }
         }
 
+        // Muestra el panel de admin si el usuario es administrador
+        function verificarAdmin() {
+            if (obtenerRol() === 'admin') {
+                document.getElementById('panel-admin').hidden = false;
+            }
+        }
+
+        // Agrega un plato nuevo
+        document.getElementById('form-plato').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const mensaje = document.getElementById('mensaje-plato');
+
+            const body = {
+                nombre:      document.getElementById('plato-nombre').value,
+                descripcion: document.getElementById('plato-descripcion').value,
+                precio:      document.getElementById('plato-precio').value,
+                imagen_url:  document.getElementById('plato-imagen').value || null,
+            };
+
+            try {
+                const respuesta = await fetch('/api/menu', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${obtenerToken()}`
+                    },
+                    body: JSON.stringify(body)
+                });
+
+                const datos = await respuesta.json();
+
+                if (respuesta.ok) {
+                    mensaje.style.color = '#218653';
+                    mensaje.textContent = '¡Plato agregado correctamente!';
+                    e.target.reset();
+                    cargarMenu(); // recarga la lista
+                } else {
+                    mensaje.style.color = '#c34c4c';
+                    mensaje.textContent = datos.mensaje || 'Error al agregar el plato';
+                }
+            } catch (error) {
+                mensaje.style.color = '#c34c4c';
+                mensaje.textContent = 'Error de conexión';
+            }
+        });
+
+        // Elimina un plato
+        async function eliminarPlato(id) {
+            if (!confirm('¿Seguro que quieres eliminar este plato?')) return;
+
+            try {
+                const respuesta = await fetch(`/api/menu/${id}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${obtenerToken()}` }
+                });
+
+                if (respuesta.ok) {
+                    cargarMenu(); // recarga la lista
+                } else {
+                    alert('No se pudo eliminar el plato');
+                }
+            } catch (error) {
+                alert('Error de conexión');
+            }
+        }
+
+        // Inicializar
+        verificarAdmin();
         cargarMenu();
     </script>
 
